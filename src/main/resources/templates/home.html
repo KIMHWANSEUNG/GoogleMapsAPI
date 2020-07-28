@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<meta charset="UTF-8" />
+<html>
+<head>
+    <title>POI Click Events</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0ao_N1YT0rqUYNCr0bLkQtD6gtYbyGKI&callback=initMap&libraries=places&v=weekly&region=kr"
+            defer
+    ></script>
+    <style type="text/css">
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+        #map {
+            height: 100%;
+        }
+
+        /* Optional: Makes the sample page fill the window. */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .title {
+            font-weight: bold;
+        }
+
+        #infowindow-content {
+            display: none;
+        }
+
+        #map #infowindow-content {
+            display: inline;
+        }
+    </style>
+    <script>
+        "use strict";
+        var service;
+        var map;
+
+        function initMap() {
+            const infowindow = new google.maps.InfoWindow({
+            });
+            const origin = {
+                lat: 37.566686,
+                lng: 126.978122
+            };
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 18,
+                center: origin,
+            });
+
+
+            service = new google.maps.places.PlacesService(map);
+           //poi 불러와주는 함수
+            service.nearbySearch({
+                location:origin,
+                radius: 500,
+                type:['point_of_interest',],
+            },callback);
+            //마커 기본요소 정하는 함수
+            function createMarker(place){
+                var marker = new google.maps.Marker({
+                    position: place.geometry.location,
+                    map: map,
+                    title: place.name,
+                    animation: google.maps.Animation.DROP,
+                });
+                //마커 클릭 이벤트
+                marker.addListener('click', () => {
+                    console.log(place);
+                    //툴팁에 뿌려주는 기능
+                    infowindow.setContent(
+                        "<div><strong>" +
+                        place.name +
+                        "</strong><br>" +
+                        "상세주소: " +
+                        place.vicinity +
+                        "<br>" +
+                        "별점:"+
+                        place.rating +
+                        "</div>"
+                    );
+
+                    infowindow.open(map,marker);
+                });
+            }
+
+            //마커 찍어주는 함수
+            function callback(results,status) {
+                if(status == google.maps.places.PlacesServiceStatus.OK){
+                    for(var i = 0; i< results.length;i++){
+                        createMarker(results[i]);
+                    }
+                }
+            }
+        }
+
+    </script>
+</head>
+<body>
+<div id="map"></div>
+<div id="infowindow-content">
+    <img id="place-icon" src="" height="16" width="16" />
+    <span id="place-name" class="title"></span><br />
+    Place ID <span id="place-id"></span><br />
+    <span id="place-address"></span>
+</div>
+</body>
+</html>

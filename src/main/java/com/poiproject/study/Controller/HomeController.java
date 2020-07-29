@@ -21,9 +21,9 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
 
-        List<MapVO> googleMap=mapService.selectMap();
+        List<MapVO> googleMap_data=mapService.selectMap();
 
-
+        model.addAttribute("googleMap_data",googleMap_data);
 
         return "home";
     }

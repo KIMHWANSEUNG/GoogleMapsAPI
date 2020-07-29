@@ -3,6 +3,12 @@
 <html>
 <head>
     <title>POI Click Events</title>
+    <!-- jQuery ui style sheet -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!-- jQuery library -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- jQuery ui library -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0ao_N1YT0rqUYNCr0bLkQtD6gtYbyGKI&callback=initMap&libraries=places&v=weekly&region=kr"
@@ -26,14 +32,14 @@
 
     </style>
     <script>
+
+
         "use strict";
         var service;
         var map;
 
         function initMap() {
-            //툴팁생성
-            const infowindow = new google.maps.InfoWindow({
-            });
+
             //좌표
             const origin = {
                 lat: 37.566686,
@@ -43,50 +49,61 @@
                 zoom: 18,
                 center: origin,
             });
+            $.ajax({
+                type: 'GET',
+                url: '/places.ajax',
+                data: {},
+                success: function (response) {
+                    console.log(response);
+                        callback(response)
+                }
+            })
 
-
-            service = new google.maps.places.PlacesService(map);
-           //poi 불러와주는 함수
+/*            service = new google.maps.places.PlacesService(map);
+            //poi 불러와주는 함수
             service.nearbySearch({
                 location:origin,
                 radius: 500,
                 type:['point_of_interest',],
-            },callback);
+            },callback);*/
+
             //마커 기본요소 정하는 함수
             function createMarker(place){
+
+                var location = {lat:parseFloat(place.mapPositionY) ,lng:parseFloat(place.mapPositionX)};
                 var marker = new google.maps.Marker({
-                    position: place.geometry.location,
+                    position:location,
                     map: map,
-                    title: place.name,
+                    title: place.postSj,
                     animation: google.maps.Animation.DROP,
                 });
-                //마커 클릭 이벤트
+                let infowindow = new google.maps.InfoWindow({
+                });
+                infowindow.setContent(
+                    "<div><strong>" +
+                    place.postSj+
+                    "</strong><br>" +
+                    "소개: " +
+                    place.sumry +
+                    "<br>" +
+                    "상세주소:"+
+                    place.adres+
+                    "</div>"
+                );
                 marker.addListener('click', () => {
-                    console.log(place);
                     //툴팁에 뿌려주는 기능
-                    infowindow.setContent(
-                        "<div><strong>" +
-                        place.name +
-                        "</strong><br>" +
-                        "상세주소: " +
-                        place.vicinity +
-                        "<br>" +
-                        "별점:"+
-                        place.rating +
-                        "</div>"
-                    );
-
                     infowindow.open(map,marker);
                 });
             }
 
+
             //마커 찍어주는 함수
-            function callback(results,status) {
-                if(status == google.maps.places.PlacesServiceStatus.OK){
+            function callback(results) {
                     for(var i = 0; i< results.length;i++){
                         createMarker(results[i]);
+                        //마커 클릭 이벤트
+
                     }
-                }
             }
         }
 

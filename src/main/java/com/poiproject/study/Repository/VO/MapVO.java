@@ -8,12 +8,12 @@ import lombok.*;
 @Builder
 public class MapVO {
 
-    String POST_SJ;
-    String SUMRY;
-    String ZIP_CODE;
-    String ADRES;
-    String ADRES2;
-    String MAP_POSITION_X;
-    String MAP_POSITION_Y;
+    String postSj;
+    String sumry;
+    String zipCode;
+    String adres;
+    String adres2;
+    String mapPositionX;
+    String mapPositionY;
 
 }

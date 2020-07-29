@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,11 +22,20 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
 
-        List<MapVO> googleMap_data=mapService.selectMap();
 
-        model.addAttribute("googleMap_data",googleMap_data);
 
         return "home";
+    }
+
+    @ResponseBody
+    @GetMapping("/places.ajax")
+    public List<MapVO> getplace(){
+
+        List<MapVO> googleMap_data=mapService.selectMap();
+
+
+
+        return googleMap_data;
     }
 
     @GetMapping("/google")

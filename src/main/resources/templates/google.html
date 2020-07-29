@@ -8,6 +8,12 @@
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0ao_N1YT0rqUYNCr0bLkQtD6gtYbyGKI&callback=initMap&libraries=places&v=weekly&region=kr"
             defer
     ></script>
+    <!-- jQuery ui style sheet -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!-- jQuery library -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- jQuery ui library -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <style type="text/css">
         /* Always set the map height explicitly to define the size of the div
          * element that contains the map. */
@@ -26,6 +32,20 @@
 
     </style>
     <script>
+        $.ajax({
+            type: 'GET',
+            url: '/places.ajax',
+            data: {},
+            success: function (response) {
+                console.log(response);
+
+                $.each(response, function (index, item) {
+
+
+                })
+            }
+        })
+
         "use strict";
         var service;
         var map;
@@ -52,6 +72,7 @@
                 radius: 500,
                 type:['point_of_interest',],
             },callback);
+
             //마커 기본요소 정하는 함수
             function createMarker(place){
                 var marker = new google.maps.Marker({

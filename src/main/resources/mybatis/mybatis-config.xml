@@ -12,7 +12,7 @@
 
     <typeAliases>
         <typeAlias type="com.poiproject.study.Repository.VO.MapVO" alias="mapvo"/>
-
+        <typeAlias type="com.poiproject.study.Repository.VO.PositionVO" alias="positionvo"/>
     </typeAliases>
 
     <mappers>

@@ -3,7 +3,25 @@
 <mapper namespace="com.poiproject.study.Repository.mapper.MapMapper">
 
     <select id="selectMap" resultType="mapvo">
-    select * from HW_POI where REGEXP_LIKE(ADRES,'세종대로')
+    select
+        *
+    from
+        HW_POI
+    where
+       REGEXP_LIKE(ADRES,'세종대로')
+    or
+        REGEXP_LIKE(ADRES,'Sejong-daero')
+    </select>
+
+    <select id="selectPosition" resultType="positionvo">
+    select
+        MAP_POSITION_X,MAP_POSITION_Y
+    from
+        HW_POI
+    where
+        REGEXP_LIKE(ADRES,'세종대로')
+    or
+        REGEXP_LIKE(ADRES,'Sejong-daero')
     </select>
 
 </mapper>

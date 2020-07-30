@@ -54,7 +54,6 @@
                 url: '/places.ajax',
                 data: {},
                 success: function (response) {
-                    console.log(response);
                         callback(response)
                 }
             })
@@ -68,8 +67,7 @@
             },callback);*/
 
             //마커 기본요소 정하는 함수
-            function createMarker(place){
-
+            function createMarker(enHashMap,place){
                 var location = {lat:parseFloat(place.mapPositionY) ,lng:parseFloat(place.mapPositionX)};
                 var marker = new google.maps.Marker({
                     position:location,
@@ -77,19 +75,33 @@
                     title: place.postSj,
                     animation: google.maps.Animation.DROP,
                 });
+
                 let infowindow = new google.maps.InfoWindow({
                 });
-                infowindow.setContent(
-                    "<div><strong>" +
-                    place.postSj+
-                    "</strong><br>" +
-                    "소개: " +
-                    place.sumry +
-                    "<br>" +
-                    "상세주소:"+
-                    place.adres+
-                    "</div>"
-                );
+
+
+                if(enHashMap) {
+                    infowindow.setContent(
+                        "<div><strong>" +
+                        place.postSj +
+                        "</strong><br>" +
+                        "소개: " +
+                        place.sumry +
+                        "<br>" +
+                        "상세주소:" +
+                        place.adres +
+                        "</div>" +
+                        "<div><strong>" +
+                        enHashMap.postSj +
+                        "</strong><br>" +
+                        "소개: " +
+                        enHashMap.sumry +
+                        "<br>" +
+                        "상세주소:" +
+                        enHashMap.adres +
+                        "</div>"
+                    );
+                }
                 marker.addListener('click', () => {
                     //툴팁에 뿌려주는 기능
                     infowindow.open(map,marker);
@@ -97,13 +109,17 @@
             }
 
 
+
             //마커 찍어주는 함수
             function callback(results) {
-                    for(var i = 0; i< results.length;i++){
-                        createMarker(results[i]);
-                        //마커 클릭 이벤트
+                    var koHashMap=results.ko
+                    var enHashMap=results.en
 
-                    }
+                    console.log(enHashMap)
+                    $.each(koHashMap, function (index,item) {
+                        createMarker(enHashMap[index],item);
+                })
+
             }
         }
 

@@ -15,5 +15,6 @@ public class MapVO {
     String adres2;
     String mapPositionX;
     String mapPositionY;
+    String langCodeId;
 
 }
